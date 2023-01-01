@@ -24,17 +24,24 @@ function App() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
   }
 
+  //состояние попапа полноразмерной картинки
+  const [selectedCard, setSelectedCard] = React.useState('')
+  function handleCardClick(card) {
+    setSelectedCard(card)
+  }
+
   function closseAllPopups(){
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setSelectedCard('');
   }
 
   return (
   <>
     <div className="page">
       <Header />
-      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}/>
+      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}/>
       <Footer />
       <PopupWithForm name={'edit-profile'} title={'Редактировать профиль'} isOpen={isEditProfilePopupOpen} onClose={closseAllPopups}>
         <fieldset className="popup__editing-profille">
@@ -64,7 +71,7 @@ function App() {
         </fieldset>
         <input className="popup__button" type="submit" value="Сохранить" />
       </PopupWithForm>
-      <ImagePopup />
+      <ImagePopup card={selectedCard} onClose={closseAllPopups}/>
     </div>
     <template id="card">
       <li className="gallery__card card">
