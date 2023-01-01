@@ -1,46 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {api} from "../../utils/Api.js"
 import Card from "../Card/Card.js"
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
-  //Имя пользователя
-  const [userName, setUserName] = React.useState('Имя')
-  function getUserName(name) {
-    setUserName(name)
-  }
-
-  //описание пользователя
-  const [userDescription, setUserDescription] = React.useState('описание')
-  function getUserDescription(description) {
-    setUserDescription(description)
-  }
-
-  //аватар пользователя
-  const [userAvatar, setUserAvatar] = React.useState('https://yt3.ggpht.com/a/AATXAJwRvTiau7KTVs1zOjQpDibja-DNQFJcciWTXb69=s900-c-k-c0xffffffff-no-rj-mo')
-  function getUserAvatar(avatar) {
-    setUserAvatar(avatar)
-  }
-
-  //карточки
-  const [cards, setCards] = React.useState([])
-  function getCards(cards) {
-    setCards(cards)
-  }
-
-  let userId
+  const [userName, setUserName] = React.useState('Имя');
+  const [userDescription, setUserDescription] = useState('описание');
+  const [userAvatar, setUserAvatar] = useState('https://yt3.ggpht.com/a/AATXAJwRvTiau7KTVs1zOjQpDibja-DNQFJcciWTXb69=s900-c-k-c0xffffffff-no-rj-mo');
+  const [cards, setCards] = useState([]);
+  const [userId, setUserId] = useState([]);
 
   //отрисовка инициализации
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([
       api.getInfoUser(),
       api.getInitialCards()
     ])
       .then(([info, initialCards]) => {
-        userId = info._id;
-        getUserName(info.name);
-        getUserDescription(info.about);
-        getUserAvatar(info.avatar);
-        getCards(initialCards);
+        setUserId(info._id);
+        setUserName(info.name);
+        setUserDescription(info.about);
+        setUserAvatar(info.avatar);
+        setCards(initialCards);
       })
       .catch((err) => {
         console.log(err);

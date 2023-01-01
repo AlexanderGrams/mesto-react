@@ -5,7 +5,7 @@ function Card({card, onCardClick}) {
 
   return (
     <li className="gallery__card card">
-      <img className="card__image" src={card.link} alt={`изображение: ${card._title}`} onClick={handleClick}/>
+      <img className="card__image" src={card.link} alt={`изображение: ${card.name}`} onClick={handleClick}/>
       <div className="card__interaction">
         <h2 className="card__title">{card.name}</h2>
         <div className="card__like">
