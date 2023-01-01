@@ -1,26 +1,27 @@
-function PopupWithForm({title, name, isOpen, onClose, children}) {
+import React, {useEffect} from 'react';
 
-  if(isOpen){
-    document.addEventListener('keydown', handleEscClose);
-  }
-
-  function close(){
-    onClose();
-    document.removeEventListener('keydown', handleEscClose);
-  };
+function PopupWithForm({title, name, isOpen, onClose, children, buttonText}) {
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscClose)
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscClose)
+    }
+  }, [isOpen])
 
   function handleEscClose(evt){
     if (evt.key === 'Escape') {
-      close();
+      onClose();
     };
   };
 
   function mauseDawnClose(evt){
     if (evt.target.classList.contains('popup_opened')) {
-      close();
+      onClose();
     };
     if (evt.target.classList.contains('popup__close')) {
-      close();
+      onClose();
     };
   }
 
@@ -32,6 +33,7 @@ function PopupWithForm({title, name, isOpen, onClose, children}) {
           {
             children
           }
+          <input className="popup__button" type="submit" value={buttonText} />
         </form>
         <button className="popup__close" type="button" onClick={onClose}></button>
       </div>
