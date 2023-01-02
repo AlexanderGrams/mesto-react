@@ -8,7 +8,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   const [userDescription, setUserDescription] = useState('описание');
   const [userAvatar, setUserAvatar] = useState('https://yt3.ggpht.com/a/AATXAJwRvTiau7KTVs1zOjQpDibja-DNQFJcciWTXb69=s900-c-k-c0xffffffff-no-rj-mo');
   const [cards, setCards] = useState([]);
-  const [userId, setUserId] = useState([]);
+  const [userId, setUserId] = useState('');
   const [loadingBoolean, setLoadingBoolean] = useState(false);
 
   //отрисовка инициализации
@@ -23,10 +23,12 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
         setUserDescription(info.about);
         setUserAvatar(info.avatar);
         setCards(initialCards);
-        setLoadingBoolean(true);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(()=>{
+        setLoadingBoolean(true);
       });
   }, [])
 
