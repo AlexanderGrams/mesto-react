@@ -5,6 +5,8 @@ import Footer from "./Footer/Footer"
 import PopupWithForm from "./PopupWithForm/PopupWithForm";
 import ImagePopup from "./ImagePopup/ImagePopup";
 import EditProfilePopup from "./EditProfilePopup/EditProfilePopup"
+import EditAvatarPopup from "./EditAvatarPopup/EditAvatarPopup"
+import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
 import {api} from "../utils/Api";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import {CurrentCardContext} from '../contexts/CurrentCardContext';
@@ -71,11 +73,40 @@ function App() {
       });
   }
 
+  function handleAddCrad({name, link}, setButtonLoading){
+    api.giveCard(name, link)
+      .then(newCard => {
+        setCurrentCards([newCard, ...currentCards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>{
+        setButtonLoading(false)
+      });
+  }
+
+  function handleUpdateAvatar({avatar}, setButtonLoading){
+    api.giveAvatar(avatar)
+      .then(userInfo => {
+        setCurrentUser(userInfo);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>{
+        setButtonLoading(false)
+      });
+  }
+
   function handleCardDelete(card) {
     api.deletCard(card._id);
     setCurrentCards(currentCards.filter(elem => elem._id !== card._id))
   }
 
+  //открытие попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
@@ -92,6 +123,7 @@ function App() {
     setSelectedCard(card);
   };
 
+  //закрытие всех попапов
   function closeAllPopups(){
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
@@ -114,21 +146,9 @@ function App() {
           }
           <Footer />
           <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
-          <PopupWithForm name={'add-card'} title={'Новое место'} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} buttonText="Сохранить">
-            <fieldset className="popup__editing-profille">
-              <input id="title-input" className="popup__item popup__item_type_title" type="text" name="name" required minLength="2" maxLength="30" placeholder="Название" />
-              <span id="title-input-error" className="popup__text-error"></span>
-              <input id="link-input" className="popup__item popup__item_type_link" type="url" name="link" required placeholder="Ссылка на картинку" />
-              <span id="link-input-error" className="popup__text-error"></span>
-            </fieldset>
-          </PopupWithForm>
+          <AddPlacePopup onAddCrad={handleAddCrad} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
           <PopupWithForm name={'question-remove'} title={'Вы уверены?'} onClose={closeAllPopups} buttonText="да"></PopupWithForm>
-          <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} buttonText="Сохранить">
-            <fieldset className="popup__editing-profille">
-              <input id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" required placeholder="Ссылка на картинку" />
-              <span id="link-avatar-input-error" className="popup__text-error"></span>
-            </fieldset>
-          </PopupWithForm>
+          <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
           <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
         </CurrentCardContext.Provider>
       </CurrentUserContext.Provider>
