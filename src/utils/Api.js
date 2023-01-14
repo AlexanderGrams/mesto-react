@@ -52,18 +52,25 @@ class Api {
     }).then(this._checkResponse)
   }
 
-  giveLike(cardId){
+  _giveLike(cardId){
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
       headers: this._headers,
     }).then(this._checkResponse)
   }
 
-  deletLike(cardId){
+  _deletLike(cardId){
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: this._headers,
     }).then(this._checkResponse)
+  }
+
+  changeLikeCardStatus(cardId, isLiked){
+    if(isLiked){
+      return this._giveLike(cardId);
+    }
+    return this._deletLike(cardId);
   }
 
   giveAvatar(link) {

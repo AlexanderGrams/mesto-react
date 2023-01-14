@@ -3,7 +3,7 @@ import Card from "../Card/Card.js";
 import {CurrentUserContext} from "../../contexts/CurrentUserContext.js"
 import {CurrentCardContext} from "../../contexts/CurrentCardContext.js"
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+function Main({onCardLike, onCardDelet, onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   const currentUserData = useContext(CurrentUserContext);
   const currentCardsData = useContext(CurrentCardContext);
 
@@ -27,7 +27,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
             {
               currentCardsData.map(card => {
                 return (
-                  <Card card={card} onCardClick={onCardClick} key={card._id}/>
+                  <Card onCardLike={onCardLike} onCardDelet={onCardDelet} card={card} onCardClick={onCardClick} key={card._id}/>
                 )
               })
             }
