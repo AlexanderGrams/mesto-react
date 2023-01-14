@@ -1,72 +1,110 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Header from "./Header/Header"
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer"
 import PopupWithForm from "./PopupWithForm/PopupWithForm";
 import ImagePopup from "./ImagePopup/ImagePopup";
+import {api} from "../utils/Api";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import {CurrentCardContext} from '../contexts/CurrentCardContext';
+import loading from "../images/loading1.gif";
 
 function App() {
   //состояние попапа аватара
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   //состояние попапа добавления новой карточки
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   //состояние попапа редактирования профиля
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   //состояние попапа полноразмерной картинки
-  const [selectedCard, setSelectedCard] = useState({})
+  const [selectedCard, setSelectedCard] = useState({});
+  //данные пользователя
+  const [currentUser, setCurrentUser] = useState({});
+  //данные карточек
+  const [currentCards, setCurrentCards] = useState([]);
+  //загрузка страницы
+  const [loadingBoolean, setLoadingBoolean] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      api.getInfoUser(),
+      api.getInitialCards()
+    ])
+      .then(([info, initialCards]) => {
+        setCurrentUser(info);
+        setCurrentCards(initialCards);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>{
+        setLoadingBoolean(true);
+      });
+  },[])
+
   function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
-  }
+    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+  };
 
   function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
-  }
+    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+  };
 
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
-  }
+    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+  };
 
   function handleCardClick(card) {
-    setSelectedCard(card)
-  }
+    setSelectedCard(card);
+  };
 
   function closseAllPopups(){
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
-  }
+  };
 
   return (
   <>
     <div className="page">
-      <Header />
-      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}/>
-      <Footer />
-      <PopupWithForm name={'edit-profile'} title={'Редактировать профиль'} isOpen={isEditProfilePopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
-        <fieldset className="popup__editing-profille">
-          <input id="name-input" className="popup__item popup__item_type_name" type="text" name="name" required minLength="2" maxLength="40" placeholder="Введите имя" />
-          <span id="name-input-error" className="popup__text-error"></span>
-          <input id="name-activity" className="popup__item popup__item_type_activity" type="text" name="activity" required minLength="2" maxLength="200" placeholder="Введите хобби" />
-          <span id="name-activity-error" className="popup__text-error"></span>
-        </fieldset>
-      </PopupWithForm>
-      <PopupWithForm name={'add-card'} title={'Новое место'} isOpen={isAddPlacePopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
-        <fieldset className="popup__editing-profille">
-          <input id="title-input" className="popup__item popup__item_type_title" type="text" name="name" required minLength="2" maxLength="30" placeholder="Название" />
-          <span id="title-input-error" className="popup__text-error"></span>
-          <input id="link-input" className="popup__item popup__item_type_link" type="url" name="link" required placeholder="Ссылка на картинку" />
-          <span id="link-input-error" className="popup__text-error"></span>
-        </fieldset>
-      </PopupWithForm>
-      <PopupWithForm name={'question-remove'} title={'Вы уверены?'} onClose={closseAllPopups} buttonText="да"></PopupWithForm>
-      <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={isEditAvatarPopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
-        <fieldset className="popup__editing-profille">
-          <input id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" required placeholder="Ссылка на картинку" />
-          <span id="link-avatar-input-error" className="popup__text-error"></span>
-        </fieldset>
-      </PopupWithForm>
-      <ImagePopup card={selectedCard} onClose={closseAllPopups}/>
+      <CurrentUserContext.Provider value={currentUser}>
+        <CurrentCardContext.Provider value={currentCards}>
+          <Header />
+          {loadingBoolean ?
+            <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}/>
+            :
+            <div className='loading-data'>
+              <img className='loading-data__img' src={loading} alt='анимация загрузки'/>
+            </div>
+          }
+          <Footer />
+          <PopupWithForm name={'edit-profile'} title={'Редактировать профиль'} isOpen={isEditProfilePopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
+            <fieldset className="popup__editing-profille">
+              <input id="name-input" className="popup__item popup__item_type_name" type="text" name="name" required minLength="2" maxLength="40" placeholder="Введите имя" />
+              <span id="name-input-error" className="popup__text-error"></span>
+              <input id="name-activity" className="popup__item popup__item_type_activity" type="text" name="activity" required minLength="2" maxLength="200" placeholder="Введите хобби" />
+              <span id="name-activity-error" className="popup__text-error"></span>
+            </fieldset>
+          </PopupWithForm>
+          <PopupWithForm name={'add-card'} title={'Новое место'} isOpen={isAddPlacePopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
+            <fieldset className="popup__editing-profille">
+              <input id="title-input" className="popup__item popup__item_type_title" type="text" name="name" required minLength="2" maxLength="30" placeholder="Название" />
+              <span id="title-input-error" className="popup__text-error"></span>
+              <input id="link-input" className="popup__item popup__item_type_link" type="url" name="link" required placeholder="Ссылка на картинку" />
+              <span id="link-input-error" className="popup__text-error"></span>
+            </fieldset>
+          </PopupWithForm>
+          <PopupWithForm name={'question-remove'} title={'Вы уверены?'} onClose={closseAllPopups} buttonText="да"></PopupWithForm>
+          <PopupWithForm name={'update-avatar'} title={'Обновить аватар'} isOpen={isEditAvatarPopupOpen} onClose={closseAllPopups} buttonText="Сохранить">
+            <fieldset className="popup__editing-profille">
+              <input id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" required placeholder="Ссылка на картинку" />
+              <span id="link-avatar-input-error" className="popup__text-error"></span>
+            </fieldset>
+          </PopupWithForm>
+          <ImagePopup card={selectedCard} onClose={closseAllPopups}/>
+        </CurrentCardContext.Provider>
+      </CurrentUserContext.Provider>
     </div>
   </>
   );
