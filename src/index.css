@@ -67,5 +67,10 @@
 @import url(./blocks/popup/__item/_type/popup__item_type_error.css);
 @import url(./blocks/popup/_animation/popup_animation.css);
 
+/* стили загрузки главного экрана */
 @import url(./blocks/loading-data/loading-data.css);
 @import url(./blocks/loading-data/__img/loading-data__img.css);
+
+/* стили загрузки кнопок */
+@import url(./blocks/loading-btn/loading-btn.css);
+@import url(./blocks/loading-btn/__img/loading-btn__img.css);
