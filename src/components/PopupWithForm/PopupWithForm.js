@@ -16,7 +16,7 @@ function PopupWithForm({title, name, isOpen, onClose, children, buttonText, onSu
   function handleEscClose(evt){
     if (evt.key === 'Escape') {
       onClose();
-    };
+    }
   };
 
   function mauseDawnClose(evt){
