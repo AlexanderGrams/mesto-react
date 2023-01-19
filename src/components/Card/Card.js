@@ -1,7 +1,26 @@
-function Card({card, onCardClick}) {
+import React, {useContext} from 'react';
+import {CurrentUserContext} from "../../contexts/CurrentUserContext.js"
+
+function Card({onCardLike, onCardDelet, card, onCardClick}) {
   function handleClick() {
     onCardClick(card);
-  }
+  };
+
+  function handleLikeClick() {
+    onCardLike(card);
+  };
+
+  function handleDeleteCardClick() {
+    onCardDelet(card);
+  };
+
+  const currentUserData = useContext(CurrentUserContext);
+  const isOwn = card.owner._id === currentUserData._id;
+
+  const isLiked = card.likes.some(i => i._id === currentUserData._id);
+  const cardLikeButtonClassName = (
+    `card__like-btn ${isLiked && 'card__like-btn_active'}`
+  );
 
   return (
     <li className="gallery__card card">
@@ -9,13 +28,14 @@ function Card({card, onCardClick}) {
       <div className="card__interaction">
         <h2 className="card__title">{card.name}</h2>
         <div className="card__like">
-          <button className="card__like-btn" type="button"></button>
-          {
-            card.likes.length !== 0 ? <p className="card__like-number">{card.likes.length}</p> : ''
+          <button className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
+          <p className="card__like-number">{
+            card.likes.length > 999 ? "999..." : (card.likes.length !== 0 ? card.likes.length : '')
           }
+          </p>
         </div>
       </div>
-      <button className="card__basket" type="button"></button>
+      {isOwn && <button className='card__basket' onClick={handleDeleteCardClick} />}
     </li>
    );
 }
