@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import Header from "./Header/Header"
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer"
-import PopupWithForm from "./PopupWithForm/PopupWithForm";
 import ImagePopup from "./ImagePopup/ImagePopup";
 import EditProfilePopup from "./EditProfilePopup/EditProfilePopup"
 import EditAvatarPopup from "./EditAvatarPopup/EditAvatarPopup"
@@ -11,6 +10,7 @@ import {api} from "../utils/Api";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import {CurrentCardContext} from '../contexts/CurrentCardContext';
 import loading from "../images/loading.gif";
+import DeleteCardQuestionPopup from './DeleteCardQuestionPopup/DeleteCardQuestionPopup';
 
 function App() {
   //состояние попапа аватара
@@ -19,6 +19,8 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   //состояние попапа редактирования профиля
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  //состояние попапа удаления карточки
+  const [isDeleteCardQuestionPopupOpen, setIsDeleteCardQuestionPopupOpen] = useState(false);
   //состояние попапа полноразмерной картинки
   const [selectedCard, setSelectedCard] = useState({});
   //данные пользователя
@@ -27,6 +29,8 @@ function App() {
   const [currentCards, setCurrentCards] = useState([]);
   //загрузка страницы
   const [loadingBoolean, setLoadingBoolean] = useState(false);
+
+  const [cardToBeDeleted, setCardToBeDeleted] = useState({});
 
   useEffect(() => {
     Promise.all([
@@ -101,11 +105,6 @@ function App() {
       });
   }
 
-  function handleCardDelete(card) {
-    api.deletCard(card._id);
-    setCurrentCards(currentCards.filter(elem => elem._id !== card._id))
-  }
-
   //открытие попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -119,6 +118,25 @@ function App() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
   };
 
+  function handleCardDeletClick(card){
+    setIsDeleteCardQuestionPopupOpen(!isDeleteCardQuestionPopupOpen);
+    setCardToBeDeleted(card);
+  }
+
+  function DeleteCard(card, setButtonLoading) {
+    api.deletCard(card._id)
+      .then(()=>{
+        setCurrentCards(currentCards.filter(elem => elem._id !== card._id))
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(()=>{
+        setButtonLoading(false)
+      });
+  }
+
   function handleCardClick(card) {
     setSelectedCard(card);
   };
@@ -128,6 +146,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsDeleteCardQuestionPopupOpen(false);
     setSelectedCard({});
   };
 
@@ -138,7 +157,7 @@ function App() {
         <CurrentCardContext.Provider value={currentCards}>
           <Header />
           {loadingBoolean ?
-            <Main onCardLike={handleCardLike} onCardDelet={handleCardDelete} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}/>
+            <Main onCardLike={handleCardLike} onCardDelet={handleCardDeletClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick}/>
             :
             <div className='loading-data'>
               <img className='loading-data__img' src={loading} alt='анимация загрузки'/>
@@ -147,8 +166,8 @@ function App() {
           <Footer />
           <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
           <AddPlacePopup onAddCrad={handleAddCrad} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
-          <PopupWithForm name={'question-remove'} title={'Вы уверены?'} onClose={closeAllPopups} buttonText="да"></PopupWithForm>
           <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
+          <DeleteCardQuestionPopup onDeleteCard={DeleteCard} card={cardToBeDeleted} isOpen={isDeleteCardQuestionPopupOpen} onClose={closeAllPopups}/>
           <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
         </CurrentCardContext.Provider>
       </CurrentUserContext.Provider>

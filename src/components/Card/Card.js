@@ -10,7 +10,7 @@ function Card({onCardLike, onCardDelet, card, onCardClick}) {
     onCardLike(card);
   };
 
-  function handleDeleteClick() {
+  function handleDeleteCardClick() {
     onCardDelet(card);
   };
 
@@ -35,7 +35,7 @@ function Card({onCardLike, onCardDelet, card, onCardClick}) {
           </p>
         </div>
       </div>
-      {isOwn && <button className='card__basket' onClick={handleDeleteClick} />}
+      {isOwn && <button className='card__basket' onClick={handleDeleteCardClick} />}
     </li>
    );
 }
