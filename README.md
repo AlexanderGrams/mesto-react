@@ -12,12 +12,12 @@
 
 
 <br />
-<div align="center">
+<div align="end">
   <a href="https://alexandergrams.github.io/mesto-react/">
     <img src="./src/images/logo_them-withe.svg" alt="Logo" width="400" height="100">
   </a>
 
-  <h3 align="center">Проект: "Место"</h3>
+  <h3 align="start">Проект: "Место"</h3>
 
   <p align="start">
     Данная работа выполняется в рамках образовательной программы <a href="https://practicum.yandex.ru/">Яндекс Практикума</a>. Проект представляет собой создание отзывчиво-адаптивного интерфейса, а так же работа с удаленной базой данных с использованием современной технологии <a href="https://reactjs.org/">React</a>. Он повторяет основной функционал популярных соцсетей: <a href="https://www.instagram.com/">Instagram</a>, <a href="https://www.facebook.com/">Facebook</a>, <a href="https://vk.com/">VKontakte</a>.
