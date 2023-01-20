@@ -182,8 +182,8 @@
  - Телеграм - [@Monteg_451](https://t.me/Monteg_451)
  - Email - Alexander.Grams@yandex.ru
 
-Ссылка на проект: [https://github.com/AlexanderGrams/mesto-react](https://github.com/AlexanderGrams/mesto-react)
-Ссылка на Github Pages: [https://alexandergrams.github.io/mesto-react/](https://alexandergrams.github.io/mesto-react/)
+>Ссылка на проект: [https://github.com/AlexanderGrams/mesto-react](https://github.com/AlexanderGrams/mesto-react)
+>Ссылка на Github Pages: [https://alexandergrams.github.io/mesto-react/](https://alexandergrams.github.io/mesto-react/)
 
 <p align="right">(<a href="#readme-top">вернуться на верх</a>)</p>
 
