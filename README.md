@@ -131,26 +131,31 @@
 
 * Редактировать информацию о себе и изменять свой аватар
 <br>
+
 <a href="https://alexandergrams.github.io/mesto-react/">![start-page-img](./src/images/readme-img-edit-profile.png)</a>
 <br>
 
 * Добавлять фото карточки с подписями, для этого необходимо придумать подпись и вставить ссылку на изображение
 <br>
+
 <a href="https://alexandergrams.github.io/mesto-react/">![start-page-img](./src/images/readme-img-add-card.png)</a>
 <br>
 
 * Оставлять реакцию на свои и чужие фотокарточки
 <br>
+
 <a href="https://alexandergrams.github.io/mesto-react/">![start-page-img](./src/images/readme-img-like-card.png)</a>
 <br>
 
 * Открывать изображения из фотокарточек в полном разрешении изображения
 <br>
+
 <a href="https://alexandergrams.github.io/mesto-react/">![start-page-img](./src/images/readme-img-popup.png)</a>
 <br>
 
 * Удалять карточки нажав корзину и далее подтвердив действие
 <br>
+
 <a href="https://alexandergrams.github.io/mesto-react/">![start-page-img](./src/images/readme-img-delet-card.png)</a>
 
 <p align="right">(<a href="#readme-top">вернуться на верх</a>)</p>
