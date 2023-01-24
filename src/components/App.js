@@ -123,10 +123,10 @@ function App() {
     setCardToBeDeleted(card);
   }
 
-  function DeleteCard(card, setButtonLoading) {
+  function deleteCard(card, setButtonLoading) {
     api.deletCard(card._id)
       .then(()=>{
-        setCurrentCards(currentCards.filter(elem => elem._id !== card._id))
+        setCurrentCards((state) => state.filter((item) => item._id !== card._id))
         closeAllPopups()
       })
       .catch((err) => {
@@ -151,7 +151,6 @@ function App() {
   };
 
   return (
-  <>
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <CurrentCardContext.Provider value={currentCards}>
@@ -167,12 +166,11 @@ function App() {
           <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
           <AddPlacePopup onAddCrad={handleAddCrad} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
           <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
-          <DeleteCardQuestionPopup onDeleteCard={DeleteCard} card={cardToBeDeleted} isOpen={isDeleteCardQuestionPopupOpen} onClose={closeAllPopups}/>
+          <DeleteCardQuestionPopup onDeleteCard={deleteCard} card={cardToBeDeleted} isOpen={isDeleteCardQuestionPopupOpen} onClose={closeAllPopups}/>
           <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
         </CurrentCardContext.Provider>
       </CurrentUserContext.Provider>
     </div>
-  </>
   );
 }
 
