@@ -47,7 +47,7 @@ function App() {
       .finally(()=>{
         setLoadingBoolean(true);
       });
-  },[])
+  }, [])
 
   function handleCardLike(card) {
     //проверяем, есть ли лайк на карточке
@@ -77,11 +77,13 @@ function App() {
       });
   }
 
-  function handleAddCrad({name, link}, setButtonLoading){
-    api.giveCard(name, link)
+  function handleAddCrad({values, setValues, setInputValidity}, setButtonLoading){
+    api.giveCard(values.cardDescription, values.linkImg)
       .then(newCard => {
         setCurrentCards([newCard, ...currentCards]);
         closeAllPopups();
+        setValues({...values, cardDescription: '', linkImg: ''});
+        setInputValidity({...values, cardDescription: '', linkImg: ''})
       })
       .catch((err) => {
         console.log(err);
