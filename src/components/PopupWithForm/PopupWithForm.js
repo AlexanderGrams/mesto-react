@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import imgLoading from "../../images/loading-btn.gif";
 
-function PopupWithForm({isSubmitDisabled, title, name, isOpen, onClose, children, buttonText, onSubmit}) {
+function PopupWithForm({resetForm, isSubmitDisabled, title, name, isOpen, onClose, children, buttonText, onSubmit}) {
   const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
@@ -15,16 +15,23 @@ function PopupWithForm({isSubmitDisabled, title, name, isOpen, onClose, children
 
   function handleEscClose(evt){
     if (evt.key === 'Escape') {
-      onClose();
+      closePopupAndResetValidForm();
     }
   };
 
   function mauseDawnClose(evt){
     if (evt.target.classList.contains('popup_opened')) {
-      onClose();
+      closePopupAndResetValidForm();
     };
     if (evt.target.classList.contains('popup__close')) {
-      onClose();
+      closePopupAndResetValidForm();
+    };
+  }
+
+  function closePopupAndResetValidForm() {
+    onClose()
+    if(resetForm){
+      resetForm();
     };
   }
 
@@ -49,7 +56,7 @@ function PopupWithForm({isSubmitDisabled, title, name, isOpen, onClose, children
             <input  disabled={isSubmitDisabled} className={isSubmitDisabled ? "popup__button popup__button_disabled" : "popup__button"} type="submit" value={buttonText} />
           }
         </form>
-        <button className="popup__close" type="button" onClick={onClose}></button>
+        <button className="popup__close" type="button" onClick={closePopupAndResetValidForm}></button>
       </div>
     </div>
   );

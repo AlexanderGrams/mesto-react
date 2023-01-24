@@ -63,11 +63,12 @@ function App() {
       });
   };
 
-  function handleUpdateUser(nameUser, description, setButtonLoading){
-    api.giveInfoUser(nameUser, description)
+  function handleUpdateUser({nameUser, activity, resetAllForms}, setButtonLoading){
+    api.giveInfoUser(nameUser, activity)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
+        resetAllForms();
       })
       .catch((err) => {
         console.log(err);
@@ -77,13 +78,12 @@ function App() {
       });
   }
 
-  function handleAddCrad({values, setValues, setInputValidity}, setButtonLoading){
+  function handleAddCrad({values, resetAllForms}, setButtonLoading){
     api.giveCard(values.cardDescription, values.linkImg)
       .then(newCard => {
         setCurrentCards([newCard, ...currentCards]);
         closeAllPopups();
-        setValues({...values, cardDescription: '', linkImg: ''});
-        setInputValidity({...values, cardDescription: '', linkImg: ''})
+        resetAllForms();
       })
       .catch((err) => {
         console.log(err);
@@ -93,11 +93,12 @@ function App() {
       });
   }
 
-  function handleUpdateAvatar({avatar}, setButtonLoading){
+  function handleUpdateAvatar({avatar, resetForm}, setButtonLoading){
     api.giveAvatar(avatar)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
+        resetForm();
       })
       .catch((err) => {
         console.log(err);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import {useState} from "react";
 
 export function useForm(inputValues) {
   const [values, setValues] = useState(inputValues);
@@ -12,5 +12,11 @@ export function useForm(inputValues) {
     setInputValidationMessage({...inputValidationMessage, [name]: event.target.validationMessage})
   };
 
-  return {values, inputValidity, inputValidationMessage, handleChange, setValues, setInputValidity};
+  const resetAllForms = () => {
+    setValues({...values, cardDescription: '', linkImg: '', nameUser: '', activity: ''});
+    setInputValidity({...values, cardDescription: '', linkImg: '', nameUser: '', activity: ''});
+    setInputValidationMessage({...values, cardDescription: '', linkImg: '', nameUser: '', activity: ''});
+  }
+
+  return {values, inputValidity, inputValidationMessage, setValues, handleChange, resetAllForms};
 }
