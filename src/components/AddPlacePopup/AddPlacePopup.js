@@ -1,32 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
+import { useForm } from "../../hooks/useForm";
 
 function AddPlacePopup({isOpen, onClose, onAddCrad}) {
-  const [nameCard, setNameCard] = useState('');
-  const [linkCard, setLinkCard] = useState('');
-
+  const {values, inputValidity, inputValidationMessage, handleChange, resetAllForms} = useForm({});
 
   function handleAddPlaceSubmit(e, setButtonLoading){
     e.preventDefault();
+
+    // Передаём значения управляемых компонентов во внешний обработчик
     onAddCrad({
-      name: nameCard,
-      link: linkCard,
+      values: values,
+      resetAllForms: resetAllForms,
     },
     setButtonLoading
     );
   }
 
-  function handleChange(e, state){
-    state(e.target.value)
-  }
+  const isSubmitDisabled = inputValidity.cardDescription && inputValidity.linkImg ? false : true;
 
   return (
-    <PopupWithForm onSubmit={handleAddPlaceSubmit} name={'add-card'} title={'Новое место'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
+    <PopupWithForm resetForm={resetAllForms} isSubmitDisabled={isSubmitDisabled} onSubmit={handleAddPlaceSubmit} name={'add-card'} title={'Новое место'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
       <fieldset className="popup__editing-profille">
-        <input id="title-input" className="popup__item popup__item_type_title" type="text" name="name" required minLength="2" maxLength="30" placeholder="Название" onChange={(e)=> {handleChange(e, setNameCard)}} />
-        <span id="title-input-error" className="popup__text-error"></span>
-        <input id="link-input" className="popup__item popup__item_type_link" type="url" name="link" required placeholder="Ссылка на картинку" onChange={(e)=> {handleChange(e, setLinkCard)}} />
-        <span id="link-input-error" className="popup__text-error"></span>
+        <input value={values.cardDescription || ''} id="title-input" className="popup__item popup__item_type_title" type="text" name="cardDescription" required minLength="2" maxLength="30" placeholder="Название" onChange={handleChange} />
+        <span id="title-input-error" className="popup__text-error">{inputValidationMessage.cardDescription}</span>
+        <input value={values.linkImg || ''} id="link-input" className="popup__item popup__item_type_link" type="url" name="linkImg" required placeholder="Ссылка на картинку" onChange={handleChange} />
+        <span id="link-input-error" className="popup__text-error">{inputValidationMessage.linkImg}</span>
       </fieldset>
     </PopupWithForm>
   );
