@@ -1,7 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
 
 function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [inputValidationMessage, setInputValidationMessage] = useState('');
+
   const inputRef = useRef()
 
   function handleSubmit(e, setButtonLoading) {
@@ -9,16 +12,33 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
 
     onUpdateAvatar({
       avatar: inputRef.current.value,
+      resetForm: resetForm,
     },
     setButtonLoading
     );
   }
 
+  function handleInput(e){
+    if(e.target.validity.valid){
+      setSubmitDisabled(false);
+      setInputValidationMessage('')
+    }else{
+      setSubmitDisabled(true);
+      setInputValidationMessage(e.target.validationMessage);
+    }
+  }
+
+  function resetForm(){
+    setSubmitDisabled(true);
+    setInputValidationMessage('');
+    inputRef.current.value = '';
+  }
+
   return (
-    <PopupWithForm onSubmit={handleSubmit} name={'update-avatar'} title={'Обновить аватар'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
+    <PopupWithForm resetForm={resetForm} onSubmit={handleSubmit} isSubmitDisabled={submitDisabled} name={'update-avatar'} title={'Обновить аватар'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
       <fieldset className="popup__editing-profille">
-        <input ref={inputRef} id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" required placeholder="Ссылка на картинку" />
-        <span id="link-avatar-input-error" className="popup__text-error"></span>
+        <input ref={inputRef} id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" onInput={handleInput} required placeholder="Ссылка на картинку" />
+        <span id="link-avatar-input-error" className="popup__text-error">{inputValidationMessage}</span>
       </fieldset>
     </PopupWithForm>
   );

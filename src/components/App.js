@@ -47,7 +47,7 @@ function App() {
       .finally(()=>{
         setLoadingBoolean(true);
       });
-  },[])
+  }, [])
 
   function handleCardLike(card) {
     //проверяем, есть ли лайк на карточке
@@ -63,11 +63,12 @@ function App() {
       });
   };
 
-  function handleUpdateUser(nameUser, description, setButtonLoading){
-    api.giveInfoUser(nameUser, description)
+  function handleUpdateUser({nameUser, activity, resetAllForms}, setButtonLoading){
+    api.giveInfoUser(nameUser, activity)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
+        resetAllForms();
       })
       .catch((err) => {
         console.log(err);
@@ -77,11 +78,12 @@ function App() {
       });
   }
 
-  function handleAddCrad({name, link}, setButtonLoading){
-    api.giveCard(name, link)
+  function handleAddCrad({values, resetAllForms}, setButtonLoading){
+    api.giveCard(values.cardDescription, values.linkImg)
       .then(newCard => {
         setCurrentCards([newCard, ...currentCards]);
         closeAllPopups();
+        resetAllForms();
       })
       .catch((err) => {
         console.log(err);
@@ -91,11 +93,12 @@ function App() {
       });
   }
 
-  function handleUpdateAvatar({avatar}, setButtonLoading){
+  function handleUpdateAvatar({avatar, resetForm}, setButtonLoading){
     api.giveAvatar(avatar)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
+        resetForm();
       })
       .catch((err) => {
         console.log(err);
