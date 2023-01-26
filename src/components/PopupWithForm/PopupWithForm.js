@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import imgLoading from "../../images/loading-btn.gif";
 
-function PopupWithForm({resetForm, isSubmitDisabled, title, name, isOpen, onClose, children, buttonText, onSubmit}) {
+function PopupWithForm({resetForm, isValid, title, name, isOpen, onClose, children, buttonText, onSubmit}) {
   const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function PopupWithForm({resetForm, isSubmitDisabled, title, name, isOpen, onClos
               <img className='loading-btn__img' src={imgLoading} alt='анимация загрузки' />
             </div>
             :
-            <input  disabled={isSubmitDisabled} className={isSubmitDisabled ? "popup__button popup__button_disabled" : "popup__button"} type="submit" value={buttonText} />
+            <input  disabled={isValid} className={isValid ? "popup__button popup__button_disabled" : "popup__button"} type="submit" value={buttonText} />
           }
         </form>
         <button className="popup__close" type="button" onClick={closePopupAndResetValidForm}></button>
