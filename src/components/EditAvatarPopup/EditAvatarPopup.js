@@ -35,7 +35,7 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
   }
 
   return (
-    <PopupWithForm resetForm={resetForm} onSubmit={handleSubmit} isSubmitDisabled={submitDisabled} name={'update-avatar'} title={'Обновить аватар'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
+    <PopupWithForm resetForm={resetForm} onSubmit={handleSubmit} isValid={submitDisabled} name={'update-avatar'} title={'Обновить аватар'} isOpen={isOpen} onClose={onClose} buttonText="Сохранить">
       <fieldset className="popup__editing-profille">
         <input ref={inputRef} id="link-avatar-input" className="popup__item popup__item_type_link-avatar" type="url" name="link" onInput={handleInput} required placeholder="Ссылка на картинку" />
         <span id="link-avatar-input-error" className="popup__text-error">{inputValidationMessage}</span>

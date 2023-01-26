@@ -63,12 +63,12 @@ function App() {
       });
   };
 
-  function handleUpdateUser({nameUser, activity, resetAllForms}, setButtonLoading){
+  function handleUpdateUser({nameUser, activity, resetForm}, setButtonLoading){
     api.giveInfoUser(nameUser, activity)
       .then(userInfo => {
         setCurrentUser(userInfo);
         closeAllPopups();
-        resetAllForms();
+        resetForm();
       })
       .catch((err) => {
         console.log(err);
@@ -78,12 +78,12 @@ function App() {
       });
   }
 
-  function handleAddCrad({values, resetAllForms}, setButtonLoading){
+  function handleAddCrad({values, resetForm}, setButtonLoading){
     api.giveCard(values.cardDescription, values.linkImg)
       .then(newCard => {
         setCurrentCards([newCard, ...currentCards]);
         closeAllPopups();
-        resetAllForms();
+        resetForm();
       })
       .catch((err) => {
         console.log(err);
